@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stacked Photo Gallery</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            margin: 0;
+            flex-direction: column;
+            text-align: center;
+        }
+        .gallery {
+            position: relative;
+            width: 300px;
+            height: 400px;
+        }
+        .gallery img {
+            position: absolute;
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery img:nth-child(1) { top: 0; left: 0; transform: rotate(-10deg); }
+        .gallery img:nth-child(2) { top: 10px; left: 10px; transform: rotate(-5deg); }
+        .gallery img:nth-child(3) { top: 20px; left: 20px; transform: rotate(0deg); }
+        .gallery img:nth-child(4) { top: 30px; left: 30px; transform: rotate(5deg); }
+        .gallery img:nth-child(5) { top: 40px; left: 40px; transform: rotate(10deg); }
+        .gallery img:hover {
+            transform: scale(1.1);
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .back-button:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stacked Photo Gallery</h1>
+    <div class="gallery">
+        <img src="ja12.jpg" alt="Travel Image 1">
+        <img src="ja13.jpg" alt="Travel Image 2">
+        <img src="ja14.jpg" alt="Travel Image 3">
+        <img src="ja16.jpg" alt="Travel Image 4">
+        <img src="ja17.jpg" alt="Travel Image 5">
+        <img src="ja20.jpg" alt="Travel Image 6">
+        <img src="ja21.jpg" alt="Travel Image 7">
+        <img src="ja24.jpg" alt="Travel Image 8">
+        <img src="ja25.jpg" alt="Travel Image 9">
+        <img src="ja27.jpg" alt="Travel Image 10">
+        <img src="ja28.jpg" alt="Travel Image 11">
+        <img src="ja29.jpg" alt="Travel Image 12">
+        <img src="ja3.jpg" alt="Travel Image 13">
+        <img src="ja30.jpg" alt="Travel Image 14">
+        <img src="ja31.jpg" alt="Travel Image 15">
+        <img src="ja32.jpg" alt="Travel Image 16">
+        <img src="ja4.jpg" alt="Travel Image 17">
+        <img src="ja5.jpg" alt="Travel Image 18">
+        <img src="ja6.jpg" alt="Travel Image 19">
+        <img src="ja8.jpg" alt="Travel Image 20">
+        <img src="ja9.jpg" alt="Travel Image 21">
+      </div>
+    <a href="index.html" class="back-button">Go Back</a>
+</body>
+</html>
