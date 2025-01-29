@@ -21,12 +21,7 @@
             color: #333;
             margin-bottom: 20px;
                  }
-            h2 {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
-        }
+           
         .gallery {
             position: relative;
             width: 300px;
@@ -108,42 +103,6 @@
             });
         });
     </script>
-</head>
-<body>
-    <h2>Selfie Collections</h2>
-     <div class="gallery">
-        <img src="ja1.jpg" alt="Travel Image 1">
-        <img src="ja23.jpg" alt="Travel Image 2">
-        <img src="ja26.jpg" alt="Travel Image 3">
-        <img src="ja33.jpg" alt="Travel Image 4">
-        <img src="ja18.jpg" alt="Travel Image 5">
-        <img src="ja34.jpg" alt="Travel Image 6">
-        <img src="ja35.jpg" alt="Travel Image 7">
-        <img src="ja36.jpg" alt="Travel Image 8">
-        <img src="ja37.jpg" alt="Travel Image 9">
-        <img src="ja38.jpg" alt="Travel Image 10">
-        <img src="ja39.jpg" alt="Travel Image 11">
-        <img src="ja40.jpg" alt="Travel Image 12">
-        <img src="ja41.jpg" alt="Travel Image 13">
-        <img src="ja42.jpg" alt="Travel Image 14">
-        <img src="ja43.jpg" alt="Travel Image 15">
-        <img src="ja10.jpg" alt="Travel Image 16">
-      </div>
-      <a href="https://jarenegado.github.io/ja/" class="back-button">Balik Bahay</a>
 
-     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const images = document.querySelectorAll(".gallery img");
-            let currentIndex = 0;
-
-            images.forEach((img, index) => {
-                img.addEventListener("click", function() {
-                    images[currentIndex].style.opacity = "0";
-                    currentIndex = (currentIndex + 1) % images.length;
-                    images[currentIndex].style.opacity = "1";
-                });
-            });
-        });
-    </script>
 </body>
 </html>
