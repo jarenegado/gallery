@@ -3,6 +3,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JA's Photo Gallery</title>
+       <script>
+     const player = document.getElementById("player");
+        let offsetX, offsetY, isDragging = false;
+
+        player.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - player.getBoundingClientRect().left;
+            offsetY = e.clientY - player.getBoundingClientRect().top;
+            player.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+            player.style.left = `${x}px`;
+            player.style.top = `${y}px`;
+            player.style.position = "absolute";
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            player.style.cursor = "grab";
+        });
+      </script>
     <style>
         .spotify-player {
             position: fixed;
@@ -131,32 +156,7 @@
         <a href="https://jarenegado.github.io/ja/" class="back-button">Balik Bahay</a>
     <div> <img src="2 copy 3.png" alt="My Travel Logo" class="logo"></div>
 
-    <script>
-     const player = document.getElementById("player");
-        let offsetX, offsetY, isDragging = false;
-
-        player.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            offsetX = e.clientX - player.getBoundingClientRect().left;
-            offsetY = e.clientY - player.getBoundingClientRect().top;
-            player.style.cursor = "grabbing";
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (!isDragging) return;
-            let x = e.clientX - offsetX;
-            let y = e.clientY - offsetY;
-            player.style.left = `${x}px`;
-            player.style.top = `${y}px`;
-            player.style.position = "absolute";
-        });
-
-        document.addEventListener("mouseup", () => {
-            isDragging = false;
-            player.style.cursor = "grab";
-        });
-      </script>
-    <script>
+     <script>
         
         document.addEventListener("DOMContentLoaded", function() {
             const images = document.querySelectorAll(".gallery img");
