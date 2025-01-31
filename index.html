@@ -132,7 +132,7 @@
     <div> <img src="2 copy 3.png" alt="My Travel Logo" class="logo"></div>
 
     <script>
-         const player = document.getElementById("player");
+     const player = document.getElementById("player");
         let offsetX, offsetY, isDragging = false;
 
         player.addEventListener("mousedown", (e) => {
@@ -155,6 +155,8 @@
             isDragging = false;
             player.style.cursor = "grab";
         });
+      </script>
+    <script>
         
         document.addEventListener("DOMContentLoaded", function() {
             const images = document.querySelectorAll(".gallery img");
