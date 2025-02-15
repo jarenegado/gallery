@@ -233,33 +233,38 @@
                 logoutBtn.classList.add("hidden");
             }
             
-            uploadBtn.addEventListener("click", uploadImage);
-            
-            function uploadImage() {
-                const files = imageUpload.files;
-                if (files.length === 0) {
-                    alert("Please select images to upload.");
-                    return;
-                }
-                
-                Array.from(files).forEach(file => {
-                    const storageRef = storage.ref("gallery/" + file.name);
-                    storageRef.put(file).then(async () => {
-                        const downloadURL = await storageRef.getDownloadURL();
-                        displayImage(downloadURL);
-                    }).catch(error => {
-                        console.error("Upload failed:", error);
-                    });
-                });
-            }
-            
-            function displayImage(url) {
-                const img = document.createElement("img");
-                img.src = url;
-                img.alt = "Uploaded Image";
-                gallery.appendChild(img);
-            }
+            uploadBtn.addEventListener("click", function() {
+                uploadImage();
+            });
         };
+        
+        function uploadImage() {
+            const files = document.getElementById("imageUpload").files;
+            if (files.length === 0) {
+                alert("Please select images to upload.");
+                return;
+            }
+            
+            const storage = firebase.storage();
+            const gallery = document.getElementById("gallery");
+            
+            Array.from(files).forEach(file => {
+                const storageRef = storage.ref("gallery/" + file.name);
+                storageRef.put(file).then(async () => {
+                    const downloadURL = await storageRef.getDownloadURL();
+                    displayImage(downloadURL);
+                }).catch(error => {
+                    console.error("Upload failed:", error);
+                });
+            });
+        }
+        
+        function displayImage(url) {
+            const img = document.createElement("img");
+            img.src = url;
+            img.alt = "Uploaded Image";
+            document.getElementById("gallery").appendChild(img);
+        }
     </script>
 </body>
 </html>
