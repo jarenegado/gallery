@@ -164,7 +164,12 @@
        
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        window.onload = function() {
+            if (typeof firebase === 'undefined') {
+                console.error("Firebase SDK not loaded properly");
+                return;
+            }
+            
             const firebaseConfig = {
                 apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
                 authDomain: "my-photo-uploads.firebaseapp.com",
@@ -174,7 +179,7 @@
                 appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
             };
             
-           firebase.initializeApp(firebaseConfig);
+            firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
             const storage = firebase.storage();
             const gallery = document.getElementById("gallery");
@@ -253,7 +258,7 @@
                 img.alt = "Uploaded Image";
                 gallery.appendChild(img);
             }
-        });
+        };
     </script>
 </body>
 </html>
