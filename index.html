@@ -3,31 +3,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JA's Photo Gallery</title>
-       <script>
-     const player = document.getElementById("player");
-        let offsetX, offsetY, isDragging = false;
-
-        player.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            offsetX = e.clientX - player.getBoundingClientRect().left;
-            offsetY = e.clientY - player.getBoundingClientRect().top;
-            player.style.cursor = "grabbing";
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (!isDragging) return;
-            let x = e.clientX - offsetX;
-            let y = e.clientY - offsetY;
-            player.style.left = `${x}px`;
-            player.style.top = `${y}px`;
-            player.style.position = "absolute";
-        });
-
-        document.addEventListener("mouseup", () => {
-            isDragging = false;
-            player.style.cursor = "grab";
-        });
-      </script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"></script>
+      
     <style>
         .spotify-player {
             position: fixed;
@@ -113,6 +92,16 @@
     </div>
 
     <h1>My Travel Photos</h1>
+    
+     <div class="auth-buttons">
+        <button id="loginBtn">Login with Google</button>
+        <button id="logoutBtn" class="hidden">Logout</button>
+    </div>
+    
+    <div id="uploadSection" class="hidden">
+        <input type="file" id="imageUpload" accept="image/*">
+        <button onclick="uploadImage()">Upload Photo</button>
+    </div>
     <div class="gallery">
         <img src="ja12.jpg" alt="Travel Image 1">
         <img src="ja13.jpg" alt="Travel Image 2">
@@ -176,6 +165,73 @@
         });
        
     </script>
-  
+    <script>
+        window.onload = function() {
+           
+            const firebaseConfig = {
+                 apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
+                 authDomain: "my-photo-uploads.firebaseapp.com",
+                 projectId: "my-photo-uploads",
+                 storageBucket: "my-photo-uploads.firebasestorage.app",
+                 messagingSenderId: "824676533372",
+                 appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
+            };
+            
+            firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+            const storage = firebase.storage();
+            const gallery = document.getElementById("gallery");
+            
+            document.getElementById("loginBtn").addEventListener("click", function() {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).then(() => showUploadSection());
+            });
+            
+            document.getElementById("logoutBtn").addEventListener("click", function() {
+                auth.signOut().then(() => hideUploadSection());
+            });
+            
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    showUploadSection();
+                } else {
+                    hideUploadSection();
+                }
+            });
+            
+            function showUploadSection() {
+                document.getElementById("uploadSection").classList.remove("hidden");
+                document.getElementById("loginBtn").classList.add("hidden");
+                document.getElementById("logoutBtn").classList.remove("hidden");
+            }
+            
+            function hideUploadSection() {
+                document.getElementById("uploadSection").classList.add("hidden");
+                document.getElementById("loginBtn").classList.remove("hidden");
+                document.getElementById("logoutBtn").classList.add("hidden");
+            }
+            
+            function uploadImage() {
+                const file = document.getElementById("imageUpload").files[0];
+                if (!file) {
+                    alert("Please select an image to upload.");
+                    return;
+                }
+                
+                const storageRef = storage.ref("gallery/" + file.name);
+                storageRef.put(file).then(async () => {
+                    const downloadURL = await storageRef.getDownloadURL();
+                    displayImage(downloadURL);
+                });
+            }
+            
+            function displayImage(url) {
+                const img = document.createElement("img");
+                img.src = url;
+                img.alt = "Uploaded Image";
+                gallery.appendChild(img);
+            }
+        };
+    </script>
 </body>
 </html>
