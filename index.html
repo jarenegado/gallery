@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JA's Photo Gallery</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"></script>
+     <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"></script>
       
     <style>
         .spotify-player {
@@ -140,32 +140,18 @@
         <button id="logoutBtn" class="hidden">Logout</button>
     </div>
     
-    <div id="uploadSection" class="hidden">
-        <input type="file" id="imageUpload" accept="image/*">
-        <button onclick="uploadImage()">Upload Photo</button>
+    <div class="auth-buttons">
+        <button id="loginBtn">Login with Google</button>
+        <button id="logoutBtn" class="hidden">Logout</button>
     </div>
-        <a href="https://jarenegado.github.io/profile/" class="back-button">Home</a>
-    <div>
-       <img src="2 copy 3.png" class="logo-hover" alt="My Logo" style="width: 75px;  display: inline-block;">
+    
+    <div id="uploadSection" class="hidden">
+        <input type="file" id="imageUpload" accept="image/*" multiple>
+        <button id="uploadBtn">Upload Photos</button>
     </div>
      <script>
-        
         document.addEventListener("DOMContentLoaded", function() {
-            const images = document.querySelectorAll(".gallery img");
-            let currentIndex = 0;
-
-            images.forEach((img, index) => {
-                img.addEventListener("click", function() {
-                    images[currentIndex].style.opacity = "0";
-                    currentIndex = (currentIndex + 1) % images.length;
-                    images[currentIndex].style.opacity = "1";
-                });
-            });
-        });
-       
-    </script>
-    <script>
-        window.onload = function() {
+           
             if (typeof firebase === 'undefined') {
                 console.error("Firebase SDK not loaded properly");
                 return;
@@ -173,11 +159,11 @@
             
             const firebaseConfig = {
                 apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
-                authDomain: "my-photo-uploads.firebaseapp.com",
-                projectId: "my-photo-uploads",
-                storageBucket: "my-photo-uploads.firebasestorage.app",
-                messagingSenderId: "824676533372",
-                appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
+  authDomain: "my-photo-uploads.firebaseapp.com",
+  projectId: "my-photo-uploads",
+  storageBucket: "my-photo-uploads.firebasestorage.app",
+  messagingSenderId: "824676533372",
+  appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
             };
             
             firebase.initializeApp(firebaseConfig);
@@ -236,12 +222,17 @@
             uploadBtn.addEventListener("click", function() {
                 uploadImage();
             });
-        };
+        });
         
         function uploadImage() {
             const files = document.getElementById("imageUpload").files;
             if (files.length === 0) {
                 alert("Please select images to upload.");
+                return;
+            }
+            
+            if (typeof firebase === 'undefined') {
+                console.error("Firebase is not defined, check script loading order");
                 return;
             }
             
