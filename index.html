@@ -177,7 +177,7 @@
                 appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
             };
             
-            firebase.initializeApp(firebaseConfig);
+           firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
             const storage = firebase.storage();
             const gallery = document.getElementById("gallery");
@@ -230,7 +230,9 @@
                 logoutBtn.classList.add("hidden");
             }
             
-            uploadBtn.addEventListener("click", function() {
+            uploadBtn.addEventListener("click", uploadImage);
+            
+            function uploadImage() {
                 const files = imageUpload.files;
                 if (files.length === 0) {
                     alert("Please select images to upload.");
@@ -246,7 +248,7 @@
                         console.error("Upload failed:", error);
                     });
                 });
-            });
+            }
             
             function displayImage(url) {
                 const img = document.createElement("img");
