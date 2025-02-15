@@ -5,10 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>JA's Photo Gallery</title>
-    <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
-      
+       <script>
+     const player = document.getElementById("player");
+        let offsetX, offsetY, isDragging = false;
+
+        player.addEventListener("mousedown", (e) => {
+            isDragging = true;
+            offsetX = e.clientX - player.getBoundingClientRect().left;
+            offsetY = e.clientY - player.getBoundingClientRect().top;
+            player.style.cursor = "grabbing";
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (!isDragging) return;
+            let x = e.clientX - offsetX;
+            let y = e.clientY - offsetY;
+            player.style.left = `${x}px`;
+            player.style.top = `${y}px`;
+            player.style.position = "absolute";
+        });
+
+        document.addEventListener("mouseup", () => {
+            isDragging = false;
+            player.style.cursor = "grab";
+        });
+      </script>
     <style>
         .spotify-player {
             position: fixed;
@@ -58,7 +79,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 100px;
         }
         
         .gallery img {
@@ -75,7 +95,7 @@
         }
         
         .back-button {
-            margin-top: 50px;
+            margin-top: 100px;
             padding: 10px 20px;
             background: #590404;
             color: white;
@@ -90,9 +110,11 @@
     </style>
 </head>
 <body>
-   
+    <div class="spotify-player">
+    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6g8PgvMS4SNikkU1IjiLCw?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    </div>
+
     <h1>My Travel Photos</h1>
-    
     <div class="gallery">
         <img src="ja12.jpg" alt="Travel Image 1">
         <img src="ja13.jpg" alt="Travel Image 2">
@@ -136,126 +158,26 @@
         <img src="ja78.jpg" alt="Travel Image 40">
         <img src="ja79.jpg" alt="Travel Image 41">
     </div>
-        <div class="auth-buttons">
-        <button id="loginBtn">Login with Google</button>
-        <button id="logoutBtn" class="hidden">Logout</button>
-    </div>
-    
-    <div id="uploadSection" class="hidden">
-        <input type="file" id="imageUpload" accept="image/*" multiple>
-        <button id="uploadBtn">Upload Photos</button>
-    </div>
-     <a href="https://jarenegado.github.io/profile/" class="back-button">Home</a>
+        <a href="https://jarenegado.github.io/profile/" class="back-button">Home</a>
     <div>
        <img src="2 copy 3.png" class="logo-hover" alt="My Logo" style="width: 75px;  display: inline-block;">
     </div>
      <script>
+        
         document.addEventListener("DOMContentLoaded", function() {
-           
-            if (typeof firebase === 'undefined') {
-                console.error("Firebase SDK not loaded properly");
-                return;
-            }
-            
-            const firebaseConfig = {
-                apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
-  authDomain: "my-photo-uploads.firebaseapp.com",
-  projectId: "my-photo-uploads",
-  storageBucket: "my-photo-uploads.appspot.com",
-  messagingSenderId: "824676533372",
-  appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
-            };
-            
-            firebase.initializeApp(firebaseConfig);
-            const auth = firebase.auth();
-            const storage = firebase.storage();
-            const gallery = document.getElementById("gallery");
-            const loginBtn = document.getElementById("loginBtn");
-            const logoutBtn = document.getElementById("logoutBtn");
-            const uploadSection = document.getElementById("uploadSection");
-            const uploadBtn = document.getElementById("uploadBtn");
-            const imageUpload = document.getElementById("imageUpload");
-            
-            const ownerEmail = "janus.renegado@gmail.com";
-            
-            loginBtn.addEventListener("click", function() {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).then((result) => {
-                    checkAuth(result.user);
-                }).catch(error => {
-                    console.error("Login failed:", error);
+            const images = document.querySelectorAll(".gallery img");
+            let currentIndex = 0;
+
+            images.forEach((img, index) => {
+                img.addEventListener("click", function() {
+                    images[currentIndex].style.opacity = "0";
+                    currentIndex = (currentIndex + 1) % images.length;
+                    images[currentIndex].style.opacity = "1";
                 });
-            });
-            
-            logoutBtn.addEventListener("click", function() {
-                auth.signOut().then(() => {
-                    hideUploadSection();
-                }).catch(error => {
-                    console.error("Logout failed:", error);
-                });
-            });
-            
-            auth.onAuthStateChanged((user) => {
-                checkAuth(user);
-            });
-            
-            function checkAuth(user) {
-                if (user && user.email === ownerEmail) {
-                    showUploadSection();
-                } else {
-                    hideUploadSection();
-                }
-            }
-            
-            function showUploadSection() {
-                uploadSection.classList.remove("hidden");
-                loginBtn.classList.add("hidden");
-                logoutBtn.classList.remove("hidden");
-            }
-            
-            function hideUploadSection() {
-                uploadSection.classList.add("hidden");
-                loginBtn.classList.remove("hidden");
-                logoutBtn.classList.add("hidden");
-            }
-            
-            uploadBtn.addEventListener("click", function() {
-                uploadImage();
             });
         });
-        
-        function uploadImage() {
-            const files = document.getElementById("imageUpload").files;
-            if (files.length === 0) {
-                alert("Please select images to upload.");
-                return;
-            }
-            
-            if (typeof firebase === 'undefined') {
-                console.error("Firebase is not defined, check script loading order");
-                return;
-            }
-            
-            const storage = firebase.storage();
-            const gallery = document.getElementById("gallery");
-            
-            Array.from(files).forEach(file => {
-                const storageRef = storage.ref("gallery/" + file.name);
-                storageRef.put(file).then(async () => {
-                    const downloadURL = await storageRef.getDownloadURL();
-                    displayImage(downloadURL);
-                }).catch(error => {
-                    console.error("Upload failed:", error);
-                });
-            });
-        }
-        
-        function displayImage(url) {
-            const img = document.createElement("img");
-            img.src = url;
-            img.alt = "Uploaded Image";
-            document.getElementById("gallery").appendChild(img);
-        }
+       
     </script>
+  
 </body>
 </html>
