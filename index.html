@@ -189,6 +189,7 @@
             const imageUpload = document.getElementById("imageUpload");
             
             const ownerEmail = "janus.renegado@gmail.com";
+            
             loginBtn.addEventListener("click", function() {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider).then((result) => {
@@ -198,6 +199,8 @@
                         alert("You are not authorized to upload photos.");
                         auth.signOut();
                     }
+                }).catch(error => {
+                    console.error("Login failed:", error);
                 });
             });
             
@@ -232,14 +235,15 @@
                     return;
                 }
                 
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
+                Array.from(files).forEach(file => {
                     const storageRef = storage.ref("gallery/" + file.name);
                     storageRef.put(file).then(async () => {
                         const downloadURL = await storageRef.getDownloadURL();
                         displayImage(downloadURL);
+                    }).catch(error => {
+                        console.error("Upload failed:", error);
                     });
-                }
+                });
             });
             
             function displayImage(url) {
