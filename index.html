@@ -167,15 +167,14 @@
        
     </script>
     <script>
-        window.onload = function() {
-           
+        document.addEventListener("DOMContentLoaded", function() {
             const firebaseConfig = {
-                 apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
-                 authDomain: "my-photo-uploads.firebaseapp.com",
-                 projectId: "my-photo-uploads",
-                 storageBucket: "my-photo-uploads.firebasestorage.app",
-                 messagingSenderId: "824676533372",
-                 appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
+                apiKey: "AIzaSyCSGr2mEyzbVZLwPzFvVbZGgF62tUE2dfU",
+                authDomain: "my-photo-uploads.firebaseapp.com",
+                projectId: "my-photo-uploads",
+                storageBucket: "my-photo-uploads.firebasestorage.app",
+                messagingSenderId: "824676533372",
+                appId: "1:824676533372:web:d7e45b87c6b35e644675f9",
             };
             
             firebase.initializeApp(firebaseConfig);
@@ -193,28 +192,31 @@
             loginBtn.addEventListener("click", function() {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 auth.signInWithPopup(provider).then((result) => {
-                    if (result.user.email === ownerEmail) {
-                        showUploadSection();
-                    } else {
-                        alert("You are not authorized to upload photos.");
-                        auth.signOut();
-                    }
+                    checkAuth(result.user);
                 }).catch(error => {
                     console.error("Login failed:", error);
                 });
             });
             
             logoutBtn.addEventListener("click", function() {
-                auth.signOut().then(() => hideUploadSection());
+                auth.signOut().then(() => {
+                    hideUploadSection();
+                }).catch(error => {
+                    console.error("Logout failed:", error);
+                });
             });
             
             auth.onAuthStateChanged((user) => {
+                checkAuth(user);
+            });
+            
+            function checkAuth(user) {
                 if (user && user.email === ownerEmail) {
                     showUploadSection();
                 } else {
                     hideUploadSection();
                 }
-            });
+            }
             
             function showUploadSection() {
                 uploadSection.classList.remove("hidden");
@@ -252,7 +254,7 @@
                 img.alt = "Uploaded Image";
                 gallery.appendChild(img);
             }
-        };
+        });
     </script>
 </body>
 </html>
